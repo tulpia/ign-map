@@ -1,5 +1,6 @@
 {
   "name": "app",
+  "homepage": "https://tulpia.github.io/ign-map/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
