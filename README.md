@@ -28,6 +28,7 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [ ] Faire le parcours (HARDCORE, à voir comment implémenter ça), voir pour faire ça hors ligne (encore plus hardcore)
 - [ ] Téléchargement du GPX
 - [ ] Balisage en direct
+- [ ] Météo
 
 ### Contribution
 - [ ] Upload des photos et du tracé
