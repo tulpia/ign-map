@@ -1,17 +1,21 @@
 // Utils
 import { useState } from "react";
-import { AppShell, Button, Group, Text } from "@mantine/core";
+import { AppShell, Button, Group, Loader, Text } from "@mantine/core";
+
+// Hooks
+import { useUserGet, useUserLogout } from "@/api/users/user.api";
 
 // Components
 import Login from "./Login";
 import Register from "./Register";
 
 function Header() {
-  /**
-   * @TODO : Implémenter le compte user pour checker si il faut deconnecter ou connecter
-   */
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
   const [registerOpen, setRegisterOpen] = useState<boolean>(false);
+  const { isPending, data } = useUserGet();
+  const mutation = useUserLogout();
+
+  console.log(data);
 
   return (
     <AppShell.Header p="md">
@@ -19,8 +23,19 @@ function Header() {
         <Text>IGN MAP</Text>
 
         <Group>
-          <Button onClick={() => setRegisterOpen(true)}>Register</Button>
-          <Button onClick={() => setLoginOpen(true)}>Login</Button>
+          {isPending || mutation.isPending ? (
+            <Loader />
+          ) : data ? (
+            <>
+              <Text>Hello {data.name}</Text>
+              <Button onClick={() => mutation.mutate()}>Logout</Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={() => setRegisterOpen(true)}>Register</Button>
+              <Button onClick={() => setLoginOpen(true)}>Login</Button>
+            </>
+          )}
         </Group>
       </Group>
 

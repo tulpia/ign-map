@@ -9,13 +9,13 @@ import {
 } from "@mantine/core";
 import { Dispatch, SetStateAction } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
 
 // Hooks
 import { useUserRegister } from "@/api/users/user.api";
 
 // Interfaces
 import { UserCredentials } from "@/api/users/user";
-import axios from "axios";
 
 function Register({
   registerOpen,
@@ -33,8 +33,6 @@ function Register({
   const onSubmit: SubmitHandler<UserCredentials> = (data) => {
     mutation.mutate(data);
   };
-
-  console.log(mutation);
 
   return (
     <Modal
