@@ -1,19 +1,37 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
+// Utils
+import { AppShell, Skeleton } from "@mantine/core";
+
+// Components
+import Map from "./components/Map";
+import Header from "./components/Header";
 
 function App() {
   return (
-    <main>
-      <MapContainer
-        center={[45.96911585510426, 6.430025782362676]}
-        zoom={13}
-        scrollWheelZoom={false}
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: "sm" }}
+      padding="0"
+    >
+      <Header />
+      <AppShell.Navbar p="md">
+        Navbar
+        {Array(15)
+          .fill(0)
+          .map((_, index) => (
+            <Skeleton key={index} h={28} mt="sm" animate={false} />
+          ))}
+      </AppShell.Navbar>
+      <AppShell.Main
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          height: "100vh",
+        }}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://data.geopf.fr/private/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&apikey=ign_scan_ws&FORMAT=image/jpeg&style=normal"
-        />
-      </MapContainer>
-    </main>
+        <Map />
+      </AppShell.Main>
+    </AppShell>
   );
 }
 
