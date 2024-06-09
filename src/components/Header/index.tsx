@@ -8,6 +8,7 @@ import { useUserGet, useUserLogout } from "@/api/users/user.api";
 // Components
 import Login from "./Login";
 import Register from "./Register";
+import MenuAccount from "./Menu";
 
 function Header() {
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
@@ -26,10 +27,7 @@ function Header() {
           {isPending || mutation.isPending ? (
             <Loader />
           ) : data ? (
-            <>
-              <Text>Hello {data.name}</Text>
-              <Button onClick={() => mutation.mutate()}>Logout</Button>
-            </>
+            <MenuAccount mutation={mutation} />
           ) : (
             <>
               <Button onClick={() => setRegisterOpen(true)}>Register</Button>
