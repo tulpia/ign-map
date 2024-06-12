@@ -1,9 +1,10 @@
 // Utils
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AppShell, Button, Group, Loader, Text } from "@mantine/core";
 
 // Hooks
-import { useUserGet, useUserLogout } from "@/api/users/user.api";
+import { AuthContext } from "@/src/auth";
+import { useUserLogout } from "@/api/users/user.api";
 
 // Components
 import Login from "./Login";
@@ -13,10 +14,8 @@ import MenuAccount from "./Menu";
 function Header() {
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
   const [registerOpen, setRegisterOpen] = useState<boolean>(false);
-  const { isPending, data } = useUserGet();
   const mutation = useUserLogout();
-
-  console.log(data);
+  const context = useContext(AuthContext);
 
   return (
     <AppShell.Header p="md">
@@ -24,9 +23,9 @@ function Header() {
         <Text>IGN MAP</Text>
 
         <Group>
-          {isPending || mutation.isPending ? (
+          {mutation.isPending ? (
             <Loader />
-          ) : data ? (
+          ) : context?.user ? (
             <MenuAccount mutation={mutation} />
           ) : (
             <>

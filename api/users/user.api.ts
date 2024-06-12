@@ -61,6 +61,8 @@ export const useUserLogout = () => {
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
+
+      window.location.reload();
     },
   });
 };

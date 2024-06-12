@@ -1,12 +1,18 @@
 // Utils
 import { AppShell } from "@mantine/core";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 // Components
 import Header from "../components/Header";
 
-export const Route = createRootRoute({
+import type { AuthContext } from "../auth";
+
+interface MyRouterContext {
+  auth: AuthContext;
+}
+
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
       <AppShell
@@ -30,7 +36,7 @@ export const Route = createRootRoute({
           <Outlet />
         </AppShell.Main>
       </AppShell>
-      <TanStackRouterDevtools />
+      <TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
     </>
   ),
 });
