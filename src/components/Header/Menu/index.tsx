@@ -29,7 +29,7 @@ function MenuAccount({ mutation }: { mutation: any }) {
           leftSection={
             <IconLogout style={{ width: rem(14), height: rem(14) }} />
           }
-          onClick={() => mutation.mutate({})}
+          onClick={() => mutation({})}
         >
           Logout
         </Menu.Item>

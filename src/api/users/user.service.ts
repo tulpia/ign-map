@@ -11,25 +11,25 @@ export const getCSRFToken = async () => {
 
 export const getUser = async (): Promise<UserData | null> => {
   return axios
-    .get("/user")
-    .then((response: AxiosResponse) => response.data)
+    .get<UserData>("/user")
+    .then((response: AxiosResponse<UserData>) => response.data)
     .catch(() => null);
 };
 
-export const login = async (data: UserCredentials): Promise<AxiosResponse> => {
+export const login = async (data: UserCredentials): Promise<UserData> => {
   return axios
     .post("/login", data)
-    .then((response: AxiosResponse) => response.data);
+    .then((response: AxiosResponse<UserData>) => response.data);
 };
 
 export const register = async (
   data: UserCredentials
-): Promise<AxiosResponse> => {
+): Promise<UserCredentials> => {
   return axios
     .post("/register", data)
-    .then((response: AxiosResponse) => response.data);
+    .then((response: AxiosResponse<UserCredentials>) => response.data);
 };
 
-export const logout = async (): Promise<AxiosResponse> => {
-  return axios.post("/logout").then((response: AxiosResponse) => response.data);
+export const logout = async (): Promise<void> => {
+  return axios.post("/logout");
 };

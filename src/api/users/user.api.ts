@@ -7,7 +7,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
 
 // Requests
 import { getCSRFToken, getUser, login, logout, register } from "./user.service";
@@ -24,18 +23,21 @@ export const useUserGet = (): UseQueryResult<UserData | null> => {
 };
 
 export const useUserLogin = (): UseMutationResult<
-  AxiosResponse<any, any>,
+  UserData,
   Error,
-  UserCredentials,
-  unknown
+  UserCredentials
 > => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UserCredentials) =>
-      getCSRFToken().then(() => login(data)),
+    mutationFn: async (data: UserCredentials) => {
+      await getCSRFToken();
+
+      return login(data);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      // eslint-disable-next-line no-void
+      void queryClient.invalidateQueries({
         queryKey: ["user"],
       });
     },
@@ -43,14 +45,16 @@ export const useUserLogin = (): UseMutationResult<
 };
 
 export const useUserRegister = (): UseMutationResult<
-  AxiosResponse<any, any>,
-  Error,
   UserCredentials,
-  unknown
+  Error,
+  UserCredentials
 > => {
   return useMutation({
-    mutationFn: (data: UserCredentials) =>
-      getCSRFToken().then(() => register(data)),
+    mutationFn: async (data: UserCredentials) => {
+      await getCSRFToken();
+
+      return register(data);
+    },
   });
 };
 
@@ -60,7 +64,8 @@ export const useUserLogout = () => {
   return useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      // eslint-disable-next-line no-void
+      void queryClient.invalidateQueries({
         queryKey: ["user"],
       });
 

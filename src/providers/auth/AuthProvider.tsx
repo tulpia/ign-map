@@ -1,5 +1,5 @@
 // Utils
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 
 // Providers
 import { AuthContext } from "./AuthContext";
@@ -8,13 +8,20 @@ import { AuthContext } from "./AuthContext";
 import { useUserGet } from "../../api/users/user.api";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data } = useUserGet();
+  const { data, isLoading } = useUserGet();
   const isAuthenticated = !!data;
+
+  const contextValue = useMemo(
+    () => ({
+      isAuthenticated,
+      isUserLoading: isLoading,
+      user: data,
+    }),
+    [isAuthenticated, isLoading, data]
+  );
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <AuthContext.Provider value={{ isAuthenticated, user: data }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }

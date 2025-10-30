@@ -16,38 +16,40 @@ import MenuAccount from "./Menu";
 function Header() {
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
   const [registerOpen, setRegisterOpen] = useState<boolean>(false);
-  const mutation = useUserLogout();
-  const context = useContext(AuthContext);
+  const { mutate, isPending } = useUserLogout();
+  const { user, isUserLoading } = useContext(AuthContext);
 
   return (
     <AppShell.Header p="md">
       <Group justify="space-between">
         <Text>IGN MAP</Text>
 
-        <Group>
-          {mutation.isPending ? (
-            <Loader />
-          ) : context?.user ? (
-            <MenuAccount mutation={mutation} />
-          ) : (
-            <>
-              <Button
-                onClick={() => {
-                  setRegisterOpen(true);
-                }}
-              >
-                Register
-              </Button>
-              <Button
-                onClick={() => {
-                  setLoginOpen(true);
-                }}
-              >
-                Login
-              </Button>
-            </>
-          )}
-        </Group>
+        {!isUserLoading && (
+          <Group>
+            {isPending ? (
+              <Loader />
+            ) : user ? (
+              <MenuAccount mutation={mutate} />
+            ) : (
+              <>
+                <Button
+                  onClick={() => {
+                    setRegisterOpen(true);
+                  }}
+                >
+                  Register
+                </Button>
+                <Button
+                  onClick={() => {
+                    setLoginOpen(true);
+                  }}
+                >
+                  Login
+                </Button>
+              </>
+            )}
+          </Group>
+        )}
       </Group>
 
       <Login loginOpen={loginOpen} setLoginOpen={setLoginOpen} />
