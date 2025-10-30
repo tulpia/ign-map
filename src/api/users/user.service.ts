@@ -3,13 +3,13 @@ import { AxiosResponse } from "axios";
 import { axios } from "../axios";
 
 // Interfaces
-import { UserCredentials } from "./user.d";
+import { UserCredentials, UserData } from "./user";
 
 export const getCSRFToken = async () => {
   return axios.get("/sanctum/csrf-cookie");
 };
 
-export const getUser = async (): Promise<AxiosResponse | null> => {
+export const getUser = async (): Promise<UserData | null> => {
   return axios
     .get("/user")
     .then((response: AxiosResponse) => response.data)

@@ -6,10 +6,11 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 // Components
 import Header from "../components/Header";
 
-import type { AuthContext } from "../auth";
+// Interfaces
+import { AuthContextInterface } from "../providers/auth/types";
 
 interface MyRouterContext {
-  auth: AuthContext;
+  auth: AuthContextInterface;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

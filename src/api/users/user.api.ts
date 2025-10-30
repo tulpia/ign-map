@@ -8,10 +8,12 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+
+// Requests
 import { getCSRFToken, getUser, login, logout, register } from "./user.service";
 
 // Interfaces
-import { UserCredentials, UserData } from "./user.d";
+import { UserCredentials, UserData } from "./user";
 
 export const useUserGet = (): UseQueryResult<UserData | null> => {
   return useQuery({

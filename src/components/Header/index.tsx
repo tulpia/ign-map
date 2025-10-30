@@ -3,8 +3,10 @@ import { useContext, useState } from "react";
 import { AppShell, Button, Group, Loader, Text } from "@mantine/core";
 
 // Hooks
-import { AuthContext } from "@/src/auth";
-import { useUserLogout } from "@/api/users/user.api";
+import { useUserLogout } from "../../api/users/user.api";
+
+// Context
+import { AuthContext } from "../../providers/auth/AuthContext";
 
 // Components
 import Login from "./Login";
@@ -29,8 +31,20 @@ function Header() {
             <MenuAccount mutation={mutation} />
           ) : (
             <>
-              <Button onClick={() => setRegisterOpen(true)}>Register</Button>
-              <Button onClick={() => setLoginOpen(true)}>Login</Button>
+              <Button
+                onClick={() => {
+                  setRegisterOpen(true);
+                }}
+              >
+                Register
+              </Button>
+              <Button
+                onClick={() => {
+                  setLoginOpen(true);
+                }}
+              >
+                Login
+              </Button>
             </>
           )}
         </Group>

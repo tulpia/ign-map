@@ -3,42 +3,20 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import router from "./utils/router";
 
 // Assets
 import "leaflet/dist/leaflet.css";
 import "@mantine/core/styles.css";
 
-import { routeTree } from "./routeTree.gen";
-import { AuthProvider, useAuth } from "./auth";
-
-// Set up a Router instance
-const router = createRouter({
-  routeTree,
-  defaultPreload: "intent",
-  context: {
-    auth: undefined!, // This will be set after we wrap the app in an AuthProvider
-  },
-});
+// Context
+import { App } from "./providers/app/App";
 
 // Register things for typesafety
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
-}
-
-function InnerApp() {
-  const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <InnerApp />
-    </AuthProvider>
-  );
 }
 
 const theme = createTheme({

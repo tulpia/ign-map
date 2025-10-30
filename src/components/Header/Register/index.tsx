@@ -12,10 +12,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 
 // Hooks
-import { useUserRegister } from "@/api/users/user.api";
+import { useUserRegister } from "../../../api/users/user.api";
 
 // Interfaces
-import { UserCredentials } from "@/api/users/user";
+import { UserCredentials } from "../../../api/users/user";
 
 function Register({
   registerOpen,
@@ -103,7 +103,7 @@ function Register({
           </Button>
 
           {mutation.isError && axios.isAxiosError(mutation.error)
-            ? Object.entries(mutation?.error?.response?.data.errors).map(
+            ? Object.entries(mutation.error.response?.data.errors).map(
                 ([key, value]) => (
                   <Text c="red.4" key={key}>
                     {value as string}

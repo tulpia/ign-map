@@ -13,10 +13,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 
 // Hooks
-import { useUserGet, useUserLogin } from "../../../../api/users/user.api";
+import { useUserGet, useUserLogin } from "../../../api/users/user.api";
 
 // Interfaces
-import { UserCredentials } from "../../../../api/users/user";
+import { UserCredentials } from "../../../api/users/user";
 
 function Login({
   loginOpen,
@@ -32,12 +32,11 @@ function Login({
     control,
     formState: { errors },
   } = useForm<UserCredentials>();
-  const onSubmit: SubmitHandler<UserCredentials> = (data) => {
-    mutation.mutate(data);
+  const onSubmit: SubmitHandler<UserCredentials> = (dataMutation) => {
+    mutation.mutate(dataMutation);
   };
 
   useEffect(() => {
-    console.log(mutation.isSuccess);
     if (mutation.isSuccess && loginOpen) {
       setLoginOpen(false);
     }
@@ -92,7 +91,7 @@ function Login({
             )}
 
             {mutation.isError && axios.isAxiosError(mutation.error)
-              ? Object.entries(mutation?.error?.response?.data.errors).map(
+              ? Object.entries(mutation.error.response?.data.errors).map(
                   ([key, value]) => (
                     <Text c="red.5" key={key}>
                       {value as string}
