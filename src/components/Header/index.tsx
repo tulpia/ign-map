@@ -22,7 +22,9 @@ function Header() {
   return (
     <AppShell.Header p="md">
       <Group justify="space-between">
-        <Text>IGN MAP</Text>
+        <Text>
+          <a href="/">IGN MAP</a>
+        </Text>
 
         {!isUserLoading && (
           <Group>
