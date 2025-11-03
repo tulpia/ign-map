@@ -78,11 +78,17 @@ export const useUserUpdate = (): UseMutationResult<
   Error,
   UserDataUpdate
 > => {
+  const queryClient: QueryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: UserDataUpdate) => {
-      await getCSRFToken();
-
       return update(data);
+    },
+    onSuccess: () => {
+      // eslint-disable-next-line no-void
+      void queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
   });
 };

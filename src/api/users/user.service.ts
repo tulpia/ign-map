@@ -11,7 +11,11 @@ export const getCSRFToken = async () => {
 
 export const getUser = async (): Promise<UserData | null> => {
   return axios
-    .get<UserData>("/user")
+    .get<UserData>("/user", {
+      headers: {
+        Accept: "application/json",
+      },
+    })
     .then((response: AxiosResponse<UserData>) => response.data)
     .catch(() => null);
 };
