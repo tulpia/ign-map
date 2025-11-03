@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import { axios } from "../axios";
 
 // Interfaces
-import { UserCredentials, UserData } from "./user";
+import { UserCredentials, UserData, UserDataUpdate } from "./user";
 
 export const getCSRFToken = async () => {
   return axios.get("/sanctum/csrf-cookie");
@@ -28,6 +28,12 @@ export const register = async (
   return axios
     .post("/register", data)
     .then((response: AxiosResponse<UserCredentials>) => response.data);
+};
+
+export const update = async (data: UserDataUpdate): Promise<UserDataUpdate> => {
+  return axios
+    .put("/user/update", data)
+    .then((response: AxiosResponse<UserDataUpdate>) => response.data);
 };
 
 export const logout = async (): Promise<void> => {

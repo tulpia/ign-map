@@ -1,6 +1,7 @@
 // Utils
 import { useContext, useState } from "react";
 import { AppShell, Button, Group, Loader, Text } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
 
 // Hooks
 import { useUserLogout } from "../../api/users/user.api";
@@ -22,9 +23,9 @@ function Header() {
   return (
     <AppShell.Header p="md">
       <Group justify="space-between">
-        <Text>
-          <a href="/">IGN MAP</a>
-        </Text>
+        <Link to="/">
+          <Text>IGN MAP</Text>
+        </Link>
 
         {!isUserLoading && (
           <Group>

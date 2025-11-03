@@ -1,5 +1,6 @@
 // Utils
 import { ReactNode, useMemo } from "react";
+import { Loader } from "@mantine/core";
 
 // Providers
 import { AuthContext } from "./AuthContext";
@@ -22,6 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    isLoading ? (
+      <Loader />
+    ) : (
+      <AuthContext.Provider value={contextValue}>
+        {children}
+      </AuthContext.Provider>
+    )
   );
 }

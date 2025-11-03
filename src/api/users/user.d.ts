@@ -13,3 +13,8 @@ export interface UserData {
   name: string;
   updated_at: string;
 }
+
+export interface UserDataUpdate {
+  name: string;
+  email: string;
+}

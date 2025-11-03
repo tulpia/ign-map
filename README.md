@@ -12,8 +12,9 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [x] Connexion
 - [x] Authentification
 - [x] Deconnexion
-- [ ] Accès au profil
-- [ ] Modification des données du profil
+- [x] Accès au profil
+- [x] Modification des données du profil
+- [ ] Ajout d'un Trail
 
 ### Map - Listing
 
