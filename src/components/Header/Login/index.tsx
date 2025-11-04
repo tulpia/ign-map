@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ function Login({
   loginOpen: boolean;
   setLoginOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const mutation = useUserLogin();
+  const { mutate, error, isError, isPending, isSuccess } = useUserLogin();
   const { data } = useUserGet();
   const {
     handleSubmit,
@@ -33,19 +33,19 @@ function Login({
     formState: { errors },
   } = useForm<UserCredentials>();
   const onSubmit: SubmitHandler<UserCredentials> = (dataMutation) => {
-    mutation.mutate(dataMutation);
+    mutate(dataMutation);
   };
 
-  useEffect(() => {
-    if (mutation.isSuccess && loginOpen) {
-      setLoginOpen(false);
-    }
-  }, [mutation.isSuccess, setLoginOpen, loginOpen]);
+  if (isSuccess && loginOpen) {
+    setLoginOpen(false);
+  }
 
   return (
     <Modal
       opened={loginOpen}
-      onClose={() => setLoginOpen(false)}
+      onClose={() => {
+        setLoginOpen(false);
+      }}
       title="Authentification"
     >
       {data ? (
@@ -82,16 +82,16 @@ function Login({
               )}
             />
 
-            {mutation.isPending ? (
+            {isPending ? (
               <Loader />
             ) : (
-              <Button type="submit" disabled={mutation.isPending}>
+              <Button type="submit" disabled={isPending}>
                 Login
               </Button>
             )}
 
-            {mutation.isError && axios.isAxiosError(mutation.error)
-              ? Object.entries(mutation.error.response?.data.errors).map(
+            {isError && axios.isAxiosError(error) && error.response
+              ? Object.entries(error.response.data.errors).map(
                   ([key, value]) => (
                     <Text c="red.5" key={key}>
                       {value as string}
