@@ -1,15 +1,14 @@
 // Utils
-import { Avatar, Menu, rem } from "@mantine/core";
-import { IconLogout, IconUser, IconUserCircle } from "@tabler/icons-react";
+import { Menu, rem } from "@mantine/core";
+import { IconLogout, IconMenu2, IconUser } from "@tabler/icons-react";
+import { UseMutateFunction } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
-function MenuAccount({ mutation }: { mutation: any }) {
+function MenuAccount({ mutation }: { mutation: UseMutateFunction }) {
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Avatar color="blue">
-          <IconUserCircle size="1.5rem" />
-        </Avatar>
+        <IconMenu2 style={{ cursor: "pointer" }} size="1.5rem" />
       </Menu.Target>
 
       <Menu.Dropdown>
@@ -29,7 +28,9 @@ function MenuAccount({ mutation }: { mutation: any }) {
           leftSection={
             <IconLogout style={{ width: rem(14), height: rem(14) }} />
           }
-          onClick={() => mutation({})}
+          onClick={() => {
+            mutation();
+          }}
         >
           Logout
         </Menu.Item>

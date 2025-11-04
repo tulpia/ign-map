@@ -4,10 +4,10 @@ import { Avatar, Group, Stack, Title } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import {
   Icon,
-  IconBellRinging,
+  IconCircleDashedPlus,
   IconLogout,
   IconProps,
-  IconReceipt2,
+  IconUser,
 } from "@tabler/icons-react";
 
 // Style
@@ -27,8 +27,12 @@ interface DataMenuItem {
 
 // @todo : possible d'automatiser ca en recuperant les routes ?
 const dataMenu: Array<DataMenuItem> = [
-  { link: "/account", label: "Mon compte", icon: IconBellRinging },
-  { link: "/account/trail", label: "Ajouter un trail", icon: IconReceipt2 },
+  { link: "/account", label: "Mon compte", icon: IconUser },
+  {
+    link: "/account/trail",
+    label: "Ajouter un trail",
+    icon: IconCircleDashedPlus,
+  },
 ];
 
 function Account({ title, children }: { title: string; children: ReactNode }) {
