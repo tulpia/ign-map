@@ -14,6 +14,8 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [x] Deconnexion
 - [x] Accès au profil
 - [x] Modification des données du profil
+- [ ] Ajout d'un Trail
+- [ ] Suppression d'un Trail
 
 ### Map - Listing
 
@@ -21,12 +23,13 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [ ] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Filtrage par distance / difficulté
+- [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
 
 ### Map - Single
 
-- [ ] Ajout d'un Trail
 - [ ] Affichage du tracé
 - [ ] Détail du trail (durée / km / dénivelé / difficulté)
+- [ ] Météo (sur 5 jours, utiliser OpenWeatherMap ou MeteoFrance)
 - [ ] Avis
 - [ ] Photos
 - [ ] Profil altimétrique (dépend du GPX / KML uploadé)
