@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
+import { Route as TrailsPostIdRouteImport } from './routes/trails/$postId'
 import { Route as AccountTrailsIndexRouteImport } from './routes/account/trails/index'
 import { Route as AccountTrailsAddIndexRouteImport } from './routes/account/trails/add/index'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const AccountIndexRoute = AccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrailsPostIdRoute = TrailsPostIdRouteImport.update({
+  id: '/trails/$postId',
+  path: '/trails/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountTrailsIndexRoute = AccountTrailsIndexRouteImport.update({
@@ -37,12 +43,14 @@ const AccountTrailsAddIndexRoute = AccountTrailsAddIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/trails/$postId': typeof TrailsPostIdRoute
   '/account': typeof AccountIndexRoute
   '/account/trails': typeof AccountTrailsIndexRoute
   '/account/trails/add': typeof AccountTrailsAddIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/trails/$postId': typeof TrailsPostIdRoute
   '/account': typeof AccountIndexRoute
   '/account/trails': typeof AccountTrailsIndexRoute
   '/account/trails/add': typeof AccountTrailsAddIndexRoute
@@ -50,18 +58,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/trails/$postId': typeof TrailsPostIdRoute
   '/account/': typeof AccountIndexRoute
   '/account/trails/': typeof AccountTrailsIndexRoute
   '/account/trails/add/': typeof AccountTrailsAddIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/account/trails' | '/account/trails/add'
+  fullPaths:
+    | '/'
+    | '/trails/$postId'
+    | '/account'
+    | '/account/trails'
+    | '/account/trails/add'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/account/trails' | '/account/trails/add'
+  to:
+    | '/'
+    | '/trails/$postId'
+    | '/account'
+    | '/account/trails'
+    | '/account/trails/add'
   id:
     | '__root__'
     | '/'
+    | '/trails/$postId'
     | '/account/'
     | '/account/trails/'
     | '/account/trails/add/'
@@ -69,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TrailsPostIdRoute: typeof TrailsPostIdRoute
   AccountIndexRoute: typeof AccountIndexRoute
   AccountTrailsIndexRoute: typeof AccountTrailsIndexRoute
   AccountTrailsAddIndexRoute: typeof AccountTrailsAddIndexRoute
@@ -90,6 +111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trails/$postId': {
+      id: '/trails/$postId'
+      path: '/trails/$postId'
+      fullPath: '/trails/$postId'
+      preLoaderRoute: typeof TrailsPostIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/trails/': {
       id: '/account/trails/'
       path: '/account/trails'
@@ -109,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TrailsPostIdRoute: TrailsPostIdRoute,
   AccountIndexRoute: AccountIndexRoute,
   AccountTrailsIndexRoute: AccountTrailsIndexRoute,
   AccountTrailsAddIndexRoute: AccountTrailsAddIndexRoute,

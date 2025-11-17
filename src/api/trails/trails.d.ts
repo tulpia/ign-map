@@ -1,12 +1,6 @@
 // Interfaces
 import { Avis } from "../avis/avis";
-
-export enum TrailDifficulty {
-  Expert = "expert",
-  Hard = "hard",
-  Moderate = "moderate",
-  Easy = "easy",
-}
+import { TrailDifficulty } from "./trails.enums";
 
 export interface TrailStats {
   denivele: number;
@@ -29,4 +23,13 @@ export interface Trail {
   avis_note: number | null;
   created_at: number;
   updated_at: number;
+}
+
+export interface TrailCreate {
+  title: string;
+  description: string;
+  time_to_complete: number;
+  difficulty: TrailDifficulty;
+  trace: File;
+  images: File[];
 }

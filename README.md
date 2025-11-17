@@ -14,7 +14,9 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [x] Deconnexion
 - [x] Accès au profil
 - [x] Modification des données du profil
-- [ ] Ajout d'un Trail
+- [x] Ajout d'un Trail
+- [x] Suppression d'un Trail
+- [ ] Modification d'un Trail
 - [ ] Listing des listes
 - [ ] Ajout d'une liste
 - [ ] Suppression d'une liste

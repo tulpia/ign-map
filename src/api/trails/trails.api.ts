@@ -10,6 +10,7 @@ import {
 
 // Requests
 import {
+  createTrail,
   deleteTrail,
   getTrail,
   getTrails,
@@ -19,7 +20,26 @@ import {
 // Interfaces
 import { Trail } from "./trails";
 
-// GET
+// CREATE
+export const useTrailCreate = (): UseMutationResult<
+  Trail | null,
+  Error,
+  FormData
+> => {
+  const queryClient: QueryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: FormData) => createTrail(data),
+    onSuccess: () => {
+      // eslint-disable-next-line no-void
+      void queryClient.invalidateQueries({
+        queryKey: ["trails"],
+      });
+    },
+  });
+};
+
+// READ
 export const useUserGetTrails = (): UseQueryResult<Trail[] | null> => {
   return useQuery({
     queryKey: ["user.trails"],

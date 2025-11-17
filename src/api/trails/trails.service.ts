@@ -5,7 +5,20 @@ import { axios } from "../axios";
 // Interfaces
 import { Trail } from "./trails";
 
-// GET
+// CREATE
+export const createTrail = async (data: FormData): Promise<Trail | null> => {
+  return axios
+    .post<Trail>("/trails/", data, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res: AxiosResponse<Trail>) => res.data)
+    .catch(() => null);
+};
+
+// READ
 export const getUserTrails = async (): Promise<Trail[] | null> => {
   return axios
     .get<Trail[]>("/user/trails", {

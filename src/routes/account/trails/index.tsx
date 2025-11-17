@@ -1,6 +1,6 @@
 // Utils
 import { Loader, Image, Group, Text, Button, Stack, Flex } from "@mantine/core";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   IconExternalLink,
   IconRoute,
@@ -24,7 +24,7 @@ import Account from "../../../components/Account";
 // Styling
 import classes from "./Trails.module.css";
 
-function Trail() {
+function Trails() {
   const { data, isLoading } = useUserGetTrails();
   const { mutate, isPending } = useTrailDelete();
 
@@ -68,9 +68,11 @@ function Trail() {
                 }}
               />
             </Button>
-            <Button variant="outline">
-              <IconExternalLink />
-            </Button>
+            <Link to="/trails/$postId" params={{ postId: String(trail.id) }}>
+              <Button variant="outline" style={{ textDecoration: "none" }}>
+                <IconExternalLink />
+              </Button>
+            </Link>
           </Group>
         </Flex>
       ))}
@@ -79,12 +81,14 @@ function Trail() {
 }
 
 export const Route = createFileRoute("/account/trails/")({
-  component: () => <Account title="Mes trails">{Trail()}</Account>,
+  component: () => <Account title="Mes trails">{Trails()}</Account>,
   beforeLoad: ({ context }) => {
     if (!context.auth.isAuthenticated) {
-      throw redirect({
+      return redirect({
         to: "/",
       });
     }
+
+    return null;
   },
 });
