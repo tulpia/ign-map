@@ -25,11 +25,13 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [ ] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Filtrage par distance / difficulté
+- [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
 
 ### Map - Single
 
 - [ ] Affichage du tracé
 - [ ] Détail du trail (durée / km / dénivelé / difficulté)
+- [ ] Météo (sur 5 jours, utiliser OpenWeatherMap ou MeteoFrance)
 - [ ] Avis
 - [ ] Photos
 - [ ] Profil altimétrique (dépend du GPX / KML uploadé)
