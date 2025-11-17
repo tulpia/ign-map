@@ -16,8 +16,6 @@ import axios from "axios";
 // Components
 import AccountLayout from "../../components/Account";
 
-// Utils
-
 // Providers
 import { AuthContext } from "../../providers/auth/AuthContext";
 

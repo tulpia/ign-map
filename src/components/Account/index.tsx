@@ -6,6 +6,7 @@ import {
   Icon,
   IconCircleDashedPlus,
   IconLogout,
+  IconMountain,
   IconProps,
   IconUser,
 } from "@tabler/icons-react";
@@ -29,7 +30,12 @@ interface DataMenuItem {
 const dataMenu: Array<DataMenuItem> = [
   { link: "/account", label: "Mon compte", icon: IconUser },
   {
-    link: "/account/trail",
+    link: "/account/trails",
+    label: "Mes trails",
+    icon: IconMountain,
+  },
+  {
+    link: "/account/trails/add",
     label: "Ajouter un trail",
     icon: IconCircleDashedPlus,
   },
@@ -75,7 +81,7 @@ function Account({ title, children }: { title: string; children: ReactNode }) {
         </div>
       </nav>
 
-      <Stack style={{ paddingTop: 10 }}>
+      <Stack className={classes.accountContent}>
         <Title order={2}>{title}</Title>
         {children}
       </Stack>

@@ -71,3 +71,9 @@
   width: 25px;
   height: 25px;
 }
+
+.accountContent {
+  padding-top: var(--mantine-spacing-md);
+  padding-right: var(--mantine-spacing-md);
+  flex: 1;
+}
