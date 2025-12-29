@@ -9,11 +9,13 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
+    "plugin:prettier/recommended",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "prettier"],
   rules: {
+    "prettier/prettier": ["error", { endOfLine: "auto" }], // optional config
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
@@ -23,10 +25,12 @@ module.exports = {
     "react/jsx-one-expression-per-line": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/control-has-associated-label": "off",
+    "import/prefer-default-export": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/quotes": "off",
     "@typescript-eslint/no-misused-promises": [
       "error",
       { checksVoidReturn: false },

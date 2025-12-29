@@ -1,0 +1,9 @@
+.trailIcon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.trailIcon svg {
+  display: flex;
+}

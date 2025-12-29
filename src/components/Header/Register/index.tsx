@@ -1,7 +1,10 @@
 // Utils
 import {
+  Box,
   Button,
+  LoadingOverlay,
   Modal,
+  Notification,
   PasswordInput,
   Stack,
   Text,
@@ -12,10 +15,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 
 // Hooks
-import { useUserRegister } from "@/api/users/user.api";
+import { useUserRegister } from "../../../api/users/user.api";
 
 // Interfaces
-import { UserCredentials } from "@/api/users/user";
+import { UserCredentials } from "../../../api/users/user";
 
 function Register({
   registerOpen,
@@ -24,96 +27,110 @@ function Register({
   registerOpen: boolean;
   setRegisterOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const mutation = useUserRegister();
+  const { mutate, isPending, isError, isSuccess, error } = useUserRegister();
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<UserCredentials>();
   const onSubmit: SubmitHandler<UserCredentials> = (data) => {
-    mutation.mutate(data);
+    mutate(data);
   };
 
   return (
-    <Modal
-      opened={registerOpen}
-      onClose={() => setRegisterOpen(false)}
-      title="Inscription"
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack>
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                label="Nom"
-                error={errors.email && "Veuillez renseigner un nom"}
-              />
-            )}
-          />
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                label="Email"
-                error={errors.email && "Veuillez renseigner un email"}
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={({ field }) => (
-              <PasswordInput
-                {...field}
-                label="Mot de passe"
-                error={errors.password && "Veuillez renseigner un mot de passe"}
-              />
-            )}
-          />
-          <Controller
-            name="password_confirmation"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={({ field }) => (
-              <PasswordInput
-                {...field}
-                label="Mot de passe"
-                error={
-                  errors.password_confirmation &&
-                  "Le mot de passe ne correspond pas"
-                }
-              />
-            )}
+    <>
+      {isSuccess && <Notification color="green" title="We notify you that" />}
+      <Modal
+        opened={registerOpen}
+        onClose={() => {
+          setRegisterOpen(false);
+        }}
+        title="Inscription"
+      >
+        <Box pos="relative">
+          <LoadingOverlay
+            visible={isPending}
+            loaderProps={{ children: "Loading..." }}
           />
 
-          <Button type="submit" disabled={mutation.isPending}>
-            Login
-          </Button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack>
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Nom"
+                    error={errors.email && "Veuillez renseigner un nom"}
+                  />
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Email"
+                    error={errors.email && "Veuillez renseigner un email"}
+                  />
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: true }}
+                defaultValue=""
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    label="Mot de passe"
+                    error={
+                      errors.password && "Veuillez renseigner un mot de passe"
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="password_confirmation"
+                control={control}
+                rules={{ required: true }}
+                defaultValue=""
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    label="Mot de passe"
+                    error={
+                      errors.password_confirmation &&
+                      "Le mot de passe ne correspond pas"
+                    }
+                  />
+                )}
+              />
 
-          {mutation.isError && axios.isAxiosError(mutation.error)
-            ? Object.entries(mutation?.error?.response?.data.errors).map(
-                ([key, value]) => (
-                  <Text c="red.4" key={key}>
-                    {value as string}
-                  </Text>
-                )
-              )
-            : ""}
-        </Stack>
-      </form>
-    </Modal>
+              <Button type="submit" disabled={isPending}>
+                Register
+              </Button>
+
+              {isError && axios.isAxiosError(error)
+                ? Object.entries(error.response?.data.errors).map(
+                    ([key, value]) => (
+                      <Text c="red.4" key={key}>
+                        {value as string}
+                      </Text>
+                    )
+                  )
+                : ""}
+            </Stack>
+          </form>
+        </Box>
+      </Modal>
+    </>
   );
 }
 

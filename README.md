@@ -1,27 +1,39 @@
 # IGN MAP
+
 Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 
 [Accéder au backend](https://github.com/tulpia/ign-map-backend)
 
-## TODO 
+## TODO
 
 ### Profil
-- [ ] Création du compte
-- [ ] Connexion
-- [ ] Authentification
-- [ ] Deconnexion
-- [ ] Accès au profil
-- [ ] Modification des données du profil
+
+- [x] Création du compte
+- [x] Connexion
+- [x] Authentification
+- [x] Deconnexion
+- [x] Accès au profil
+- [x] Modification des données du profil
+- [x] Ajout d'un Trail
+- [x] Suppression d'un Trail
+- [ ] Modification d'un Trail
+- [ ] Listing des listes
+- [ ] Ajout d'une liste
+- [ ] Suppression d'une liste
 
 ### Map - Listing
+
 - [ ] Affichage des trails dans la boundingBox de la map + update au move de la map
 - [ ] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Filtrage par distance / difficulté
+- [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
 
 ### Map - Single
+
 - [ ] Affichage du tracé
 - [ ] Détail du trail (durée / km / dénivelé / difficulté)
+- [ ] Météo (sur 5 jours, utiliser OpenWeatherMap ou MeteoFrance)
 - [ ] Avis
 - [ ] Photos
 - [ ] Profil altimétrique (dépend du GPX / KML uploadé)
@@ -31,6 +43,7 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [ ] Météo
 
 ### Contribution
+
 - [ ] Upload des photos et du tracé
 - [ ] Titre, description, details, filtres
 - [ ] Balisage
