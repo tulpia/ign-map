@@ -1,4 +1,4 @@
-// Types
+// Interfaces / Types
 import { UserData } from "../../api/users/user";
 
 export interface AuthContextInterface {

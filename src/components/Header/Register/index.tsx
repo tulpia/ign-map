@@ -48,10 +48,7 @@ function Register({
         title="Inscription"
       >
         <Box pos="relative">
-          <LoadingOverlay
-            visible={isPending}
-            loaderProps={{ children: "Loading..." }}
-          />
+          <LoadingOverlay visible={isPending} loaderProps={{ children: "Loading..." }} />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack>
@@ -62,7 +59,11 @@ function Register({
                 rules={{ required: true }}
                 render={({ field }) => (
                   <TextInput
-                    {...field}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      field.onChange(e.currentTarget.value);
+                    }}
+                    onBlur={field.onBlur}
                     label="Nom"
                     error={errors.email && "Veuillez renseigner un nom"}
                   />
@@ -75,7 +76,11 @@ function Register({
                 rules={{ required: true }}
                 render={({ field }) => (
                   <TextInput
-                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      field.onChange(e.currentTarget.value);
+                    }}
+                    onBlur={field.onBlur}
                     label="Email"
                     error={errors.email && "Veuillez renseigner un email"}
                   />
@@ -88,11 +93,13 @@ function Register({
                 defaultValue=""
                 render={({ field }) => (
                   <PasswordInput
-                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      field.onChange(e.currentTarget.value);
+                    }}
+                    onBlur={field.onBlur}
                     label="Mot de passe"
-                    error={
-                      errors.password && "Veuillez renseigner un mot de passe"
-                    }
+                    error={errors.password && "Veuillez renseigner un mot de passe"}
                   />
                 )}
               />
@@ -103,12 +110,13 @@ function Register({
                 defaultValue=""
                 render={({ field }) => (
                   <PasswordInput
-                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      field.onChange(e.currentTarget.value);
+                    }}
+                    onBlur={field.onBlur}
                     label="Mot de passe"
-                    error={
-                      errors.password_confirmation &&
-                      "Le mot de passe ne correspond pas"
-                    }
+                    error={errors.password_confirmation && "Le mot de passe ne correspond pas"}
                   />
                 )}
               />
@@ -118,13 +126,11 @@ function Register({
               </Button>
 
               {isError && axios.isAxiosError(error)
-                ? Object.entries(error.response?.data.errors).map(
-                    ([key, value]) => (
-                      <Text c="red.4" key={key}>
-                        {value as string}
-                      </Text>
-                    )
-                  )
+                ? Object.entries(error.response?.data.errors).map(([key, value]) => (
+                    <Text c="red.4" key={key}>
+                      {value as string}
+                    </Text>
+                  ))
                 : ""}
             </Stack>
           </form>

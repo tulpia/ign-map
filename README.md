@@ -16,18 +16,23 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [x] Modification des données du profil
 - [x] Ajout d'un Trail
 - [x] Suppression d'un Trail
-- [ ] Modification d'un Trail
-- [ ] Listing des listes
-- [ ] Ajout d'une liste
-- [ ] Suppression d'une liste
+- [x] Modification d'un Trail
 
 ### Map - Listing
 
 - [ ] Affichage des trails dans la boundingBox de la map + update au move de la map
 - [ ] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
+- [ ] Filtrage par distance / difficulté / temps de complétion
 - [ ] Recherche avec Autocomplete IGN
-- [ ] Filtrage par distance / difficulté
 - [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
+
+### Listes
+
+- [ ] Route des listes
+- [ ] Listing des listes
+- [ ] Ajout d'une liste
+- [ ] Suppression d'une liste
+- [ ] CRUD d'un trail dans une list
 
 ### Map - Single
 

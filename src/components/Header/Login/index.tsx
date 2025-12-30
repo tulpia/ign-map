@@ -1,19 +1,12 @@
 // Utils
-import {
-  Button,
-  Loader,
-  Modal,
-  PasswordInput,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, Loader, Modal, PasswordInput, Stack, Text, TextInput } from "@mantine/core";
 import { Dispatch, SetStateAction } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 // Hooks
-import { useUserGet, useUserLogin } from "../../../api/users/user.api";
+import { userQuery, useUserLogin } from "../../../api/users/user.api";
 
 // Interfaces
 import { UserCredentials } from "../../../api/users/user";
@@ -26,7 +19,7 @@ function Login({
   setLoginOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { mutate, error, isError, isPending, isSuccess } = useUserLogin();
-  const { data } = useUserGet();
+  const { data } = useQuery(userQuery());
   const {
     handleSubmit,
     control,
@@ -60,7 +53,11 @@ function Login({
               rules={{ required: true }}
               render={({ field }) => (
                 <TextInput
-                  {...field}
+                  value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e.currentTarget.value);
+                  }}
+                  onBlur={field.onBlur}
                   label="Email"
                   error={errors.email && "Veuillez renseigner un email"}
                 />
@@ -73,11 +70,13 @@ function Login({
               defaultValue=""
               render={({ field }) => (
                 <PasswordInput
-                  {...field}
+                  value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e.currentTarget.value);
+                  }}
+                  onBlur={field.onBlur}
                   label="Mot de passe"
-                  error={
-                    errors.password && "Veuillez renseigner un mot de passe"
-                  }
+                  error={errors.password && "Veuillez renseigner un mot de passe"}
                 />
               )}
             />
@@ -91,13 +90,11 @@ function Login({
             )}
 
             {isError && axios.isAxiosError(error) && error.response
-              ? Object.entries(error.response.data.errors).map(
-                  ([key, value]) => (
-                    <Text c="red.5" key={key}>
-                      {value as string}
-                    </Text>
-                  )
-                )
+              ? Object.entries(error.response.data.errors).map(([key, value]) => (
+                  <Text c="red.5" key={key}>
+                    {value as string}
+                  </Text>
+                ))
               : ""}
           </Stack>
         </form>
