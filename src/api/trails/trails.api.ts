@@ -3,9 +3,7 @@ import {
   QueryClient,
   useMutation,
   UseMutationResult,
-  useQuery,
   useQueryClient,
-  UseQueryResult,
 } from "@tanstack/react-query";
 
 // Requests
@@ -15,6 +13,7 @@ import {
   getTrail,
   getTrails,
   getUserTrails,
+  updateTrail,
 } from "./trails.service";
 
 // Interfaces
@@ -31,38 +30,50 @@ export const useTrailCreate = (): UseMutationResult<
   return useMutation({
     mutationFn: (data: FormData) => createTrail(data),
     onSuccess: () => {
-      // eslint-disable-next-line no-void
-      void queryClient.invalidateQueries({
-        queryKey: ["trails"],
+      queryClient.invalidateQueries({ queryKey: ["trails"] });
+    },
+  });
+};
+
+export const useTrailUpdate = (): UseMutationResult<
+  Trail | null,
+  Error,
+  { id: number; data: FormData }
+> => {
+  const queryClient: QueryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
+      updateTrail(id, data),
+    onSuccess: (_data, variables) => {
+      // invalidate relevant queries
+      queryClient.invalidateQueries({ queryKey: ["trails"] });
+      queryClient.invalidateQueries({ queryKey: ["user.trails"] });
+      queryClient.invalidateQueries({
+        queryKey: ["trails", String(variables.id)],
       });
     },
   });
 };
 
 // READ
-export const useUserGetTrails = (): UseQueryResult<Trail[] | null> => {
-  return useQuery({
-    queryKey: ["user.trails"],
-    queryFn: getUserTrails,
-    retry: false,
-  });
-};
+export const userTrailsQuery = () => ({
+  queryKey: ["user.trails"] as const,
+  queryFn: getUserTrails,
+  retry: false,
+});
 
-export const useTrailsGet = (): UseQueryResult<Trail[] | null> => {
-  return useQuery({
-    queryKey: ["trails"],
-    queryFn: getTrails,
-    retry: false,
-  });
-};
+export const trailsQuery = () => ({
+  queryKey: ["trails"] as const,
+  queryFn: getTrails,
+  retry: false,
+});
 
-export const useTrailGet = (id: number): UseQueryResult<Trail | null> => {
-  return useQuery({
-    queryKey: ["trails", id],
-    queryFn: () => getTrail(id),
-    retry: false,
-  });
-};
+export const trailQuery = (id: string | number) => ({
+  queryKey: ["trails", String(id)] as const,
+  queryFn: () => getTrail(Number(id)),
+  retry: false,
+});
 
 // DELETE
 export const useTrailDelete = (): UseMutationResult<null, Error, number> => {

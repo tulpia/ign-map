@@ -2,7 +2,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createTheme, MantineProvider } from "@mantine/core";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import router from "./utils/router";
 
@@ -12,6 +12,9 @@ import "@mantine/core/styles.css";
 
 // Context
 import { App } from "./providers/app/App";
+
+// Queries
+import { queryClient } from "./api/client";
 
 // Register things for typesafety
 declare module "@tanstack/react-router" {
@@ -24,17 +27,15 @@ const theme = createTheme({
   /** Put your mantine theme override here */
 });
 
-const queryClient = new QueryClient();
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Suspense fallback={<div>Loading...</div>}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <Suspense fallback={<div>Loading...</div>}>
         <MantineProvider theme={theme}>
           <App />
         </MantineProvider>
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </Suspense>
+      </Suspense>
+    </QueryClientProvider>
   </React.StrictMode>
 );

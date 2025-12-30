@@ -1,4 +1,4 @@
-// Utils
+// Utils (external libraries)
 import { createContext } from "react";
 
 // Types

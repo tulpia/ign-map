@@ -9,17 +9,14 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:prettier/recommended",
+    "prettier",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh", "prettier"],
+  plugins: ["react-refresh"],
   rules: {
-    "prettier/prettier": ["error", { endOfLine: "auto" }], // optional config
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
+    // Formatting is handled by Prettier. Run `npm run format` to apply formatting.
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "no-tabs": "off",
     "no-nested-ternary": "off",
     "react/jsx-one-expression-per-line": "off",
@@ -31,10 +28,8 @@ module.exports = {
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/quotes": "off",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      { checksVoidReturn: false },
-    ],
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
   },
   parserOptions: {
     ecmaVersion: "latest",

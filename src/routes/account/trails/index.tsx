@@ -1,34 +1,26 @@
-// Utils
-import { Loader, Image, Group, Text, Button, Stack, Flex } from "@mantine/core";
+// Utils (external libraries)
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import {
-  IconExternalLink,
-  IconRoute,
-  IconTrash,
-  IconTrekking,
-  IconTrendingUp,
-} from "@tabler/icons-react";
-
-// Requests
-import {
-  useTrailDelete,
-  useUserGetTrails,
-} from "../../../api/trails/trails.api";
-
-// Interfaces
-import { Trail as TrailInterface } from "../../../api/trails/trails";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Loader, Group, Text, Button, Stack, Flex } from "@mantine/core";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 
 // Components
 import Account from "../../../components/Account";
+import Trail from "../../../components/Trails/Trail";
 
-// Styling
-import classes from "./Trails.module.css";
+// Interfaces (types)
+import { Trail as TrailInterface } from "../../../api/trails/trails";
+
+// Api / hooks / services
+import { queryClient } from "../../../api/client";
+import { getUser } from "../../../api/users/user.service";
+import { useTrailDelete, userTrailsQuery } from "../../../api/trails/trails.api";
 
 function Trails() {
-  const { data, isLoading } = useUserGetTrails();
+  const { data } = useSuspenseQuery(userTrailsQuery());
   const { mutate, isPending } = useTrailDelete();
 
-  if (isLoading || isPending) {
+  if (isPending) {
     return <Loader />;
   }
 
@@ -40,26 +32,7 @@ function Trails() {
     <Stack>
       {data?.map((trail: TrailInterface) => (
         <Flex key={trail.id} justify="space-between" align="center">
-          <Group gap="sm">
-            <Image src={trail.images[0]} h={100} w={100} radius={5} />
-            <Stack justify="center" gap="xs">
-              <Text fw={700}>{trail.title}</Text>
-              <Group gap="sm">
-                <Text className={classes.trailIcon}>
-                  <IconRoute />
-                  <span>{trail.stats.distance}km</span>
-                </Text>
-                <Text className={classes.trailIcon}>
-                  <IconTrendingUp />
-                  <span>{trail.stats.denivele}m</span>
-                </Text>
-                <Text className={classes.trailIcon}>
-                  <IconTrekking />
-                  <span>{trail.stats.difficulty}</span>
-                </Text>
-              </Group>
-            </Stack>
-          </Group>
+          <Trail trail={trail} />
           <Group gap="sm">
             <Button variant="outline">
               <IconTrash
@@ -68,9 +41,9 @@ function Trails() {
                 }}
               />
             </Button>
-            <Link to="/trails/$postId" params={{ postId: String(trail.id) }}>
+            <Link to="/trails/$postId/edit" params={{ postId: String(trail.id) }}>
               <Button variant="outline" style={{ textDecoration: "none" }}>
-                <IconExternalLink />
+                <IconEdit />
               </Button>
             </Link>
           </Group>
@@ -82,11 +55,14 @@ function Trails() {
 
 export const Route = createFileRoute("/account/trails/")({
   component: () => <Account title="Mes trails">{Trails()}</Account>,
-  beforeLoad: ({ context }) => {
-    if (!context.auth.isAuthenticated) {
-      return redirect({
-        to: "/",
-      });
+  loader: ({ context: { queryClient: client } }) => client.ensureQueryData(userTrailsQuery()),
+  beforeLoad: async () => {
+    const user =
+      queryClient.getQueryData(["user"]) ??
+      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
+
+    if (!user) {
+      return redirect({ to: "/" });
     }
 
     return null;

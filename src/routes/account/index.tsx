@@ -2,16 +2,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useContext, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  Alert,
-  Button,
-  Grid,
-  Group,
-  Loader,
-  Text,
-  TextInput,
-} from "@mantine/core";
 import axios from "axios";
+import { Alert, Button, Grid, Group, Loader, Text, TextInput } from "@mantine/core";
+import { queryClient } from "../../api/client";
+import { getUser } from "../../api/users/user.service";
 
 // Components
 import AccountLayout from "../../components/Account";
@@ -36,8 +30,8 @@ function Account() {
     formState: { errors },
   } = useForm<UserDataUpdate>({
     defaultValues: {
-      name: user?.name,
-      email: user?.email,
+      name: user?.name || "",
+      email: user?.email || "",
     },
   });
   const onSubmit: SubmitHandler<UserDataUpdate> = (data) => {
@@ -63,7 +57,11 @@ function Account() {
               rules={{ required: true }}
               render={({ field }) => (
                 <TextInput
-                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    field.onChange(e.currentTarget.value);
+                  }}
+                  onBlur={field.onBlur}
                   label="Nom"
                   error={errors.name && "Veuillez renseigner un nom"}
                 />
@@ -78,7 +76,11 @@ function Account() {
               rules={{ required: true }}
               render={({ field }) => (
                 <TextInput
-                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    field.onChange(e.currentTarget.value);
+                  }}
+                  onBlur={field.onBlur}
                   label="Email"
                   error={errors.email && "Veuillez renseigner un email"}
                 />
@@ -96,13 +98,11 @@ function Account() {
             ) : isSuccess ? (
               <Alert variant="light" color="green" title="Updated." />
             ) : isError && axios.isAxiosError(error) ? (
-              Object.entries(error.response?.data.errors).map(
-                ([key, value]) => (
-                  <Text c="red.4" key={key}>
-                    {value as string}
-                  </Text>
-                )
-              )
+              Object.entries(error.response?.data.errors).map(([key, value]) => (
+                <Text c="red.4" key={key}>
+                  {value as string}
+                </Text>
+              ))
             ) : (
               ""
             )}
@@ -114,14 +114,18 @@ function Account() {
 }
 
 export const Route = createFileRoute("/account/")({
-  component: () => (
-    <AccountLayout title="Modifier mon profile">{Account()}</AccountLayout>
-  ),
-  beforeLoad: ({ context }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/",
-      });
+  component: () => <AccountLayout title="Modifier mon profile">{Account()}</AccountLayout>,
+  beforeLoad: async () => {
+    const user =
+      queryClient.getQueryData(["user"]) ??
+      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
+
+    if (!user) {
+      const redirectObj = redirect({ to: "/" });
+      const err = Object.assign(new Error("Redirecting to /"), redirectObj);
+      throw err;
     }
+
+    return null;
   },
 });

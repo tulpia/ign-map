@@ -1,39 +1,19 @@
 // Utils
-import {
-  QueryClient,
-  UseMutationResult,
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { QueryClient, UseMutationResult, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Requests
-import {
-  getCSRFToken,
-  getUser,
-  login,
-  logout,
-  register,
-  update,
-} from "./user.service";
+import { getCSRFToken, getUser, login, logout, register, update } from "./user.service";
 
 // Interfaces
 import { UserCredentials, UserData, UserDataUpdate } from "./user";
 
-export const useUserGet = (): UseQueryResult<UserData | null> => {
-  return useQuery({
-    queryKey: ["user"],
-    queryFn: getUser,
-    retry: false,
-  });
-};
+export const userQuery = () => ({
+  queryKey: ["user"] as const,
+  queryFn: getUser,
+  retry: false,
+});
 
-export const useUserLogin = (): UseMutationResult<
-  UserData,
-  Error,
-  UserCredentials
-> => {
+export const useUserLogin = (): UseMutationResult<UserData, Error, UserCredentials> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
@@ -51,11 +31,7 @@ export const useUserLogin = (): UseMutationResult<
   });
 };
 
-export const useUserRegister = (): UseMutationResult<
-  UserCredentials,
-  Error,
-  UserCredentials
-> => {
+export const useUserRegister = (): UseMutationResult<UserCredentials, Error, UserCredentials> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
@@ -73,17 +49,11 @@ export const useUserRegister = (): UseMutationResult<
   });
 };
 
-export const useUserUpdate = (): UseMutationResult<
-  UserDataUpdate,
-  Error,
-  UserDataUpdate
-> => {
+export const useUserUpdate = (): UseMutationResult<UserDataUpdate, Error, UserDataUpdate> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: UserDataUpdate) => {
-      return update(data);
-    },
+    mutationFn: async (data: UserDataUpdate) => update(data),
     onSuccess: () => {
       // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({

@@ -1,15 +1,16 @@
-// Utils
+// Utils (external libraries)
 import { ReactNode, useMemo } from "react";
 import { Loader } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 
 // Providers
 import { AuthContext } from "./AuthContext";
 
-// Apis
-import { useUserGet } from "../../api/users/user.api";
+// Api / query options
+import { userQuery } from "../../api/users/user.api";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data, isLoading } = useUserGet();
+  const { data, isLoading } = useQuery(userQuery());
   const isAuthenticated = !!data;
 
   const contextValue = useMemo(
@@ -21,14 +22,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [isAuthenticated, isLoading, data]
   );
 
-  return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    isLoading ? (
-      <Loader />
-    ) : (
-      <AuthContext.Provider value={contextValue}>
-        {children}
-      </AuthContext.Provider>
-    )
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
