@@ -1,5 +1,5 @@
 // Utils (external libraries)
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Loader, Group, Text, Button, Stack, Flex } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
@@ -13,7 +13,7 @@ import { Trail as TrailInterface } from "../../../api/trails/trails";
 
 // Api / hooks / services
 import { queryClient } from "../../../api/client";
-import { getUser } from "../../../api/users/user.service";
+import { ensureAuth } from "../../guards";
 import { useTrailDelete, userTrailsQuery } from "../../../api/trails/trails.api";
 
 function Trails() {
@@ -56,15 +56,5 @@ function Trails() {
 export const Route = createFileRoute("/account/trails/")({
   component: () => <Account title="Mes trails">{Trails()}</Account>,
   loader: ({ context: { queryClient: client } }) => client.ensureQueryData(userTrailsQuery()),
-  beforeLoad: async () => {
-    const user =
-      queryClient.getQueryData(["user"]) ??
-      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
-
-    if (!user) {
-      return redirect({ to: "/" });
-    }
-
-    return null;
-  },
+  beforeLoad: () => ensureAuth(queryClient),
 });

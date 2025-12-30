@@ -1,19 +1,20 @@
 // Utils (external libraries)
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import axios from "axios";
-import { Loader, Text, Alert } from "@mantine/core";
+import { Loader, Alert } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 
 import TrailForm from "../../../../components/Trails/TrailForm";
 
 // Components
 import Account from "../../../../components/Account";
+import { ServerErrors } from "../../../../components/Errors/ServerErrors";
 
 // Interfaces (types)
 
 // Api / hooks / services
 import { queryClient } from "../../../../api/client";
-import { getUser } from "../../../../api/users/user.service";
+import { ensureAuth } from "../../../guards";
 import { useTrailCreate } from "../../../../api/trails/trails.api";
 
 function AddTrail() {
@@ -41,29 +42,12 @@ function AddTrail() {
   return (
     <>
       <TrailForm onSubmit={handleFormSubmit} isPending={isPending} />
-
-      {isError && axios.isAxiosError(error)
-        ? Object.entries(error.response?.data.errors).map(([key, value]) => (
-            <Text c="red.4" key={key}>
-              {value as string}
-            </Text>
-          ))
-        : ""}
+      <ServerErrors error={error} isError={isError} />
     </>
   );
 }
 
 export const Route = createFileRoute("/account/trails/add/")({
   component: () => <Account title="Ajouter un trail">{AddTrail()}</Account>,
-  beforeLoad: async () => {
-    const user =
-      queryClient.getQueryData(["user"]) ??
-      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
-
-    if (!user) {
-      return redirect({ to: "/" });
-    }
-
-    return null;
-  },
+  beforeLoad: () => ensureAuth(queryClient),
 });

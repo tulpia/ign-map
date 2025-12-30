@@ -1,10 +1,5 @@
 // Utils
-import {
-  QueryClient,
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { QueryClient, useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 
 // Requests
 import {
@@ -20,11 +15,7 @@ import {
 import { Trail } from "./trails";
 
 // CREATE
-export const useTrailCreate = (): UseMutationResult<
-  Trail | null,
-  Error,
-  FormData
-> => {
+export const useTrailCreate = (): UseMutationResult<Trail | null, Error, FormData> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
@@ -43,8 +34,7 @@ export const useTrailUpdate = (): UseMutationResult<
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
-      updateTrail(id, data),
+    mutationFn: ({ id, data }: { id: number; data: FormData }) => updateTrail(id, data),
     onSuccess: (_data, variables) => {
       // invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["trails"] });
@@ -82,9 +72,14 @@ export const useTrailDelete = (): UseMutationResult<null, Error, number> => {
   return useMutation({
     mutationFn: (id: number) => deleteTrail(id),
     onSuccess: () => {
+      // Invalidate all trail-related queries
       // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({
         queryKey: ["trails"],
+      });
+      // eslint-disable-next-line no-void
+      void queryClient.invalidateQueries({
+        queryKey: ["user.trails"],
       });
     },
   });

@@ -1,11 +1,11 @@
 // Utils
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useContext, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { Alert, Button, Grid, Group, Loader, Text, TextInput } from "@mantine/core";
 import { queryClient } from "../../api/client";
-import { getUser } from "../../api/users/user.service";
+import { ensureAuth } from "../guards";
 
 // Components
 import AccountLayout from "../../components/Account";
@@ -115,17 +115,5 @@ function Account() {
 
 export const Route = createFileRoute("/account/")({
   component: () => <AccountLayout title="Modifier mon profile">{Account()}</AccountLayout>,
-  beforeLoad: async () => {
-    const user =
-      queryClient.getQueryData(["user"]) ??
-      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
-
-    if (!user) {
-      const redirectObj = redirect({ to: "/" });
-      const err = Object.assign(new Error("Redirecting to /"), redirectObj);
-      throw err;
-    }
-
-    return null;
-  },
+  beforeLoad: () => ensureAuth(queryClient),
 });

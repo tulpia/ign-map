@@ -1,17 +1,17 @@
 // Utils (external libraries)
-import { createFileRoute, redirect, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { Alert, Loader, Text } from "@mantine/core";
+import { Alert, Loader } from "@mantine/core";
 
 // Components
 import Account from "../../../components/Account";
 import TrailForm from "../../../components/Trails/TrailForm";
+import { ServerErrors } from "../../../components/Errors/ServerErrors";
 
 // Api / hooks / services
 import { queryClient } from "../../../api/client";
-import { getUser } from "../../../api/users/user.service";
+import { ensureAuth } from "../../guards";
 import { useTrailUpdate, trailQuery } from "../../../api/trails/trails.api";
 
 function EditTrail() {
@@ -48,13 +48,7 @@ function EditTrail() {
         submitLabel="Mettre à jour"
       />
 
-      {isError && axios.isAxiosError(error) && error.response
-        ? Object.entries(error.response.data.errors).map(([key, value]) => (
-            <Text c="red.4" key={key}>
-              {value as string}
-            </Text>
-          ))
-        : ""}
+      <ServerErrors error={error} isError={isError} />
     </>
   );
 }
@@ -63,15 +57,5 @@ export const Route = createFileRoute("/trails/$postId/edit")({
   component: () => <Account title="Éditer le trail">{EditTrail()}</Account>,
   loader: ({ context: { queryClient: routeQueryClient }, params: { postId } }) =>
     routeQueryClient.ensureQueryData(trailQuery(parseInt(postId, 10))),
-  beforeLoad: async () => {
-    const user =
-      queryClient.getQueryData(["user"]) ??
-      (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
-
-    if (!user) {
-      return redirect({ to: "/" });
-    }
-
-    return null;
-  },
+  beforeLoad: () => ensureAuth(queryClient),
 });

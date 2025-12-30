@@ -17,6 +17,30 @@ import { IconFile, IconPhoto } from "@tabler/icons-react";
 import { Trail, TrailCreate } from "../../api/trails/trails";
 import { TrailDifficulty } from "../../api/trails/trails.enums";
 
+const isExistingTrail = (v?: TrailCreate | Trail | null): v is Trail =>
+  !!v && typeof (v as Trail).id === "number";
+
+const deriveTrailDefaults = (trail?: TrailCreate | Trail | null): TrailCreate => {
+  if (isExistingTrail(trail)) {
+    return {
+      title: trail.title,
+      description: trail.description,
+      time_to_complete: trail.stats.time_to_complete || 0,
+      difficulty: trail.stats.difficulty || TrailDifficulty.Easy,
+      trace: undefined as unknown as File,
+      images: [],
+    };
+  }
+  return {
+    title: (trail as TrailCreate | undefined)?.title || "",
+    description: (trail as TrailCreate | undefined)?.description || "",
+    time_to_complete: (trail as TrailCreate | undefined)?.time_to_complete || 0,
+    difficulty: (trail as TrailCreate | undefined)?.difficulty || TrailDifficulty.Easy,
+    trace: undefined as unknown as File,
+    images: [],
+  };
+};
+
 export interface TrailFormProps {
   defaultValues?: TrailCreate | Trail | null;
   onSubmit: (formData: FormData) => void;
@@ -32,26 +56,7 @@ export default function TrailForm({
 }: TrailFormProps) {
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  const isExistingTrail = (v?: TrailCreate | Trail | null): v is Trail =>
-    !!v && typeof (v as Trail).id === "number";
-
-  const initialDefaults: TrailCreate = isExistingTrail(defaultValues)
-    ? {
-        title: defaultValues.title,
-        description: defaultValues.description,
-        time_to_complete: defaultValues.stats.time_to_complete || 0,
-        difficulty: defaultValues.stats.difficulty || TrailDifficulty.Easy,
-        trace: undefined as unknown as File,
-        images: [],
-      }
-    : {
-        title: (defaultValues as TrailCreate | undefined)?.title || "",
-        description: (defaultValues as TrailCreate | undefined)?.description || "",
-        time_to_complete: (defaultValues as TrailCreate | undefined)?.time_to_complete || 0,
-        difficulty: (defaultValues as TrailCreate | undefined)?.difficulty || TrailDifficulty.Easy,
-        trace: undefined as unknown as File,
-        images: [],
-      };
+  const initialDefaults = deriveTrailDefaults(defaultValues);
 
   const {
     handleSubmit,
@@ -64,25 +69,7 @@ export default function TrailForm({
 
   useEffect(() => {
     if (defaultValues) {
-      reset(
-        isExistingTrail(defaultValues)
-          ? {
-              title: defaultValues.title,
-              description: defaultValues.description,
-              time_to_complete: defaultValues.stats.time_to_complete || 0,
-              difficulty: defaultValues.stats.difficulty || TrailDifficulty.Easy,
-              trace: undefined as unknown as File,
-              images: [],
-            }
-          : {
-              title: defaultValues.title || "",
-              description: defaultValues.description || "",
-              time_to_complete: defaultValues.time_to_complete || 0,
-              difficulty: defaultValues.difficulty || TrailDifficulty.Easy,
-              trace: undefined as unknown as File,
-              images: [],
-            }
-      );
+      reset(deriveTrailDefaults(defaultValues));
     }
   }, [defaultValues, reset]);
 
