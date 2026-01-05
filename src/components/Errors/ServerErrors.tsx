@@ -1,5 +1,6 @@
+// Utils
 import axios, { AxiosError } from "axios";
-import { Stack, Text } from "@mantine/core";
+import { Alert, Stack, Text } from "@mantine/core";
 
 export interface ServerErrorsProps {
   error?: Error | null;
@@ -15,8 +16,18 @@ export function ServerErrors({ error, isError }: ServerErrorsProps) {
     return null;
   }
 
+  // On est jamais censé arriver ici si on n'a pas la permission d'accéder à la ressource
+  // Neanmoins, on gère le cas pour afficher un message plus clair
+  if (error.status === 403) {
+    return (
+      <Alert variant="light" color="red" title="Accès refusé">
+        Vous n&apos;avez pas l&apos;autorisation d&apos;accéder à cette ressource.
+      </Alert>
+    );
+  }
+
   const axiosError = error as AxiosError<{ errors: Record<string, string> }>;
-  const errors = axiosError.response?.data?.errors;
+  const errors = axiosError.response?.data.errors;
 
   if (!errors || Object.keys(errors).length === 0) {
     return null;

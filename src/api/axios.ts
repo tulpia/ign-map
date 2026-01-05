@@ -1,5 +1,6 @@
 // Utils
 import Axios from "axios";
+import { queryClient } from "./client";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -12,21 +13,19 @@ export const axios = Axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Ensure cookies are sent with requests
+  withCredentials: true,
   withXSRFToken: true,
 });
 
-// Handle 401 responses by clearing auth state and redirecting
+// Handle 401 responses by clearing auth state
+// Don't redirect here - let TanStack Router's beforeLoad handlers redirect
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear cached user data
-      const { queryClient } = require("./client");
+      // Clear cached user data so auth checks will fail properly
       queryClient.setQueryData(["user"], null);
-      // Redirect to home/login
-      window.location.href = "/";
     }
-    return Promise.reject(error);
+    return Promise.reject(error instanceof Error ? error : new Error(String(error)));
   }
 );

@@ -15,7 +15,7 @@ import {
 import { Trail } from "./trails";
 
 // CREATE
-export const useTrailCreate = (): UseMutationResult<Trail | null, Error, FormData> => {
+export const useTrailCreate = (): UseMutationResult<Trail, Error, FormData> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({
@@ -27,7 +27,7 @@ export const useTrailCreate = (): UseMutationResult<Trail | null, Error, FormDat
 };
 
 export const useTrailUpdate = (): UseMutationResult<
-  Trail | null,
+  Trail,
   Error,
   { id: number; data: FormData }
 > => {
@@ -36,7 +36,6 @@ export const useTrailUpdate = (): UseMutationResult<
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: FormData }) => updateTrail(id, data),
     onSuccess: (_data, variables) => {
-      // invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["trails"] });
       queryClient.invalidateQueries({ queryKey: ["user.trails"] });
       queryClient.invalidateQueries({
@@ -66,7 +65,7 @@ export const trailQuery = (id: string | number) => ({
 });
 
 // DELETE
-export const useTrailDelete = (): UseMutationResult<null, Error, number> => {
+export const useTrailDelete = (): UseMutationResult<void, Error, number> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useMutation({

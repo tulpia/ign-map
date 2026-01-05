@@ -6,7 +6,7 @@ import { axios } from "../axios";
 import { Trail } from "./trails";
 
 // CREATE
-export const createTrail = async (data: FormData): Promise<Trail | null> =>
+export const createTrail = async (data: FormData): Promise<Trail> =>
   axios
     .post<Trail>("/trails/", data, {
       headers: {
@@ -14,60 +14,51 @@ export const createTrail = async (data: FormData): Promise<Trail | null> =>
         "Content-Type": "multipart/form-data",
       },
     })
-    .then((res: AxiosResponse<Trail>) => res.data)
-    .catch(() => null);
+    .then((res: AxiosResponse<Trail>) => res.data);
 
 // READ
-export const getUserTrails = async (): Promise<Trail[] | null> =>
+export const getUserTrails = async (): Promise<Trail[]> =>
   axios
     .get<Trail[]>("/user/trails", {
       headers: { Accept: "application/json" },
     })
-    .then((res) => res.data)
-    .catch(() => null);
+    .then((res) => res.data);
 
-export const getTrails = async (): Promise<Trail[] | null> =>
+export const getTrails = async (): Promise<Trail[]> =>
   axios
     .get<Trail[]>("/trails", {
       headers: { Accept: "application/json" },
     })
-    .then((res) => res.data)
-    .catch(() => null);
+    .then((res) => res.data);
 
-export const getTrail = async (id: number): Promise<Trail | null> =>
+export const getTrail = async (id: number): Promise<Trail> =>
   axios
     .get<Trail>(`/trails/${String(id)}`, {
       headers: { Accept: "application/json" },
     })
-    .then((res: AxiosResponse<Trail>) => res.data)
-    .catch(() => null);
+    .then((res: AxiosResponse<Trail>) => res.data);
 
 // UPDATE
-export const updateTrail = async (id: number, data: FormData): Promise<Trail | null> => {
-  try {
-    if (data instanceof FormData && !data.has("__method")) {
-      data.append("__method", "PUT");
-    }
-
-    const res: AxiosResponse<Trail> = await axios.post<Trail>(`/trails/${String(id)}`, data, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "multipart/form-data",
-        "X-HTTP-Method-Override": "PUT",
-      },
-    });
-
-    return res.data;
-  } catch {
-    return null;
+export const updateTrail = async (id: number, data: FormData): Promise<Trail> => {
+  if (data instanceof FormData && !data.has("__method")) {
+    data.append("__method", "PUT");
   }
+
+  const res: AxiosResponse<Trail> = await axios.post<Trail>(`/trails/${String(id)}`, data, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      "X-HTTP-Method-Override": "PUT",
+    },
+  });
+
+  return res.data;
 };
 
 // DELETE
-export const deleteTrail = async (id: number): Promise<null> =>
+export const deleteTrail = async (id: number): Promise<void> =>
   axios
-    .delete<null>(`/trails/${String(id)}`, {
+    .delete<void>(`/trails/${String(id)}`, {
       headers: { Accept: "application/json" },
     })
-    .then((res: AxiosResponse<null>) => res.data)
-    .catch(() => null);
+    .then(() => {});

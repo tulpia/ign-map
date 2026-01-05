@@ -13,6 +13,7 @@ import { ServerErrors } from "../../../components/Errors/ServerErrors";
 import { queryClient } from "../../../api/client";
 import { ensureAuth } from "../../guards";
 import { useTrailUpdate, trailQuery } from "../../../api/trails/trails.api";
+import { UserData } from "../../../api/users/user";
 
 function EditTrail() {
   const params = useParams({ from: "/trails/$postId/edit" });
@@ -55,7 +56,21 @@ function EditTrail() {
 
 export const Route = createFileRoute("/trails/$postId/edit")({
   component: () => <Account title="Éditer le trail">{EditTrail()}</Account>,
-  loader: ({ context: { queryClient: routeQueryClient }, params: { postId } }) =>
-    routeQueryClient.ensureQueryData(trailQuery(parseInt(postId, 10))),
+  loader: async ({ context: { queryClient: routeQueryClient }, params: { postId } }) => {
+    const id = parseInt(postId, 10);
+
+    const user: UserData | null | undefined = routeQueryClient.getQueryData(["user"]);
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const trail = await routeQueryClient.ensureQueryData(trailQuery(id));
+
+    if (trail.user_id !== user.id) {
+      throw new Error("Unauthorized: You do not own this trail");
+    }
+
+    return null;
+  },
   beforeLoad: () => ensureAuth(queryClient),
 });

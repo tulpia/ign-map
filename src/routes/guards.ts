@@ -1,19 +1,26 @@
-import { QueryClient, skipToken } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { redirect } from "@tanstack/react-router";
-import { getUser } from "../api/users/user.service";
 
 /**
  * Ensure user is authenticated. Returns null if valid, redirects to "/" if not.
  * Use in route `beforeLoad` handlers.
+ *
+ * The root loader pre-fetches the user and explicitly sets cache to null if fetch fails,
+ * so this should use the cached value without refetching.
  */
-export const ensureAuth = async (queryClient: QueryClient) => {
-  const user =
-    queryClient.getQueryData(["user"]) ??
-    (await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser }).catch(() => null));
+export const ensureAuth = (queryClient: QueryClient) => {
+  const cachedUser = queryClient.getQueryData(["user"]);
 
-  if (!user) {
-    return redirect({ to: "/" });
+  // If cache is explicitly set (even to null), use it without refetching
+  if (cachedUser !== undefined) {
+    if (!cachedUser) {
+      return redirect({ to: "/" });
+    }
+    return null;
   }
 
+  // If cache was never set, this shouldn't happen because root loader runs first
+  // But just in case, return null to allow the route to load
+  // (AuthProvider will handle showing loading state)
   return null;
 };

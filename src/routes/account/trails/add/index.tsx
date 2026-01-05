@@ -1,6 +1,5 @@
 // Utils (external libraries)
 import { createFileRoute, Link } from "@tanstack/react-router";
-import axios from "axios";
 import { Loader, Alert } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 

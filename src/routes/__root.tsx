@@ -23,11 +23,12 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   loader: async () => {
     // Pre-fetch the current user into the react-query cache so AuthProvider doesn't trigger
-    // an extra network request on mount. If the request fails, getUser returns null.
+    // an extra network request on mount. If the request fails, explicitly set user to null.
     try {
       await queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser });
     } catch {
-      // ignore fetch errors
+      // Explicitly set user to null so subsequent auth checks don't retry
+      queryClient.setQueryData(["user"], null);
     }
 
     return null;
