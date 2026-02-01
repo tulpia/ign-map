@@ -25,6 +25,8 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 - [ ] Filtrage par distance / difficulté / temps de complétion
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
+- [ ] Changement du tileLayer
+- [ ] Pointage par defaut de la map sur le pays de l'user
 
 ### Listes
 
