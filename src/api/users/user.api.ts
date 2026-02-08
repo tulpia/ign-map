@@ -14,7 +14,7 @@ export const userQuery = () => ({
 });
 
 export const useUserLogin = (): UseMutationResult<UserData, Error, UserCredentials> => {
-  const queryClient: QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: UserCredentials) => {
@@ -23,7 +23,6 @@ export const useUserLogin = (): UseMutationResult<UserData, Error, UserCredentia
       return login(data);
     },
     onSuccess: () => {
-      // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({
         queryKey: ["user"],
       });
@@ -32,7 +31,7 @@ export const useUserLogin = (): UseMutationResult<UserData, Error, UserCredentia
 };
 
 export const useUserRegister = (): UseMutationResult<UserCredentials, Error, UserCredentials> => {
-  const queryClient: QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: UserCredentials) => {
@@ -41,7 +40,6 @@ export const useUserRegister = (): UseMutationResult<UserCredentials, Error, Use
       return register(data);
     },
     onSuccess: () => {
-      // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({
         queryKey: ["user"],
       });
@@ -50,12 +48,11 @@ export const useUserRegister = (): UseMutationResult<UserCredentials, Error, Use
 };
 
 export const useUserUpdate = (): UseMutationResult<UserDataUpdate, Error, UserDataUpdate> => {
-  const queryClient: QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: UserDataUpdate) => update(data),
     onSuccess: () => {
-      // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({
         queryKey: ["user"],
       });
@@ -64,12 +61,11 @@ export const useUserUpdate = (): UseMutationResult<UserDataUpdate, Error, UserDa
 };
 
 export const useUserLogout = () => {
-  const queryClient: QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
-      // eslint-disable-next-line no-void
       void queryClient.invalidateQueries({
         queryKey: ["user"],
       });

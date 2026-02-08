@@ -19,10 +19,10 @@ export interface Trail {
   trace: string;
   images: Array<string>;
   stats: TrailStats;
-  avis: Avis;
+  avisSummary: Avis;
   avis_note: number | null;
-  created_at: number;
-  updated_at: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface TrailCreate {

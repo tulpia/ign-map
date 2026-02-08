@@ -6,7 +6,7 @@ export interface AvisUser {
 export interface Avis {
   id: number;
   note: number;
-  description: number;
+  description: string;
   user?: AvisUser;
-  created_at?: number;
+  created_at?: string;
 }
