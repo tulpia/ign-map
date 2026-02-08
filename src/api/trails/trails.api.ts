@@ -1,5 +1,5 @@
 // Utils
-import { QueryClient, useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 
 // Requests
 import {
@@ -12,7 +12,7 @@ import {
 } from "./trails.service";
 
 // Interfaces
-import { Trail } from "./trails";
+import { Trail, TrailMapBoundingBox } from "./trails";
 
 // CREATE
 export const useTrailCreate = (): UseMutationResult<Trail, Error, FormData> => {
@@ -52,9 +52,9 @@ export const userTrailsQuery = () => ({
   retry: false,
 });
 
-export const trailsQuery = () => ({
-  queryKey: ["trails"] as const,
-  queryFn: getTrails,
+export const trailsQuery = (bbox?: TrailMapBoundingBox) => ({
+  queryKey: ["trails", bbox] as const,
+  queryFn: () => getTrails(bbox),
   retry: false,
 });
 
@@ -72,10 +72,10 @@ export const useTrailDelete = (): UseMutationResult<void, Error, number> => {
     mutationFn: (id: number) => deleteTrail(id),
     onSuccess: () => {
       // Invalidate all trail-related queries
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["trails"],
       });
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["user.trails"],
       });
     },

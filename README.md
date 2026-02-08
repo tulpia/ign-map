@@ -20,8 +20,9 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 
 ### Map - Listing
 
-- [ ] Affichage des trails dans la boundingBox de la map + update au move de la map
-- [ ] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
+- [x] Affichage des trails dans la boundingBox de la map + update au move de la map
+- [x] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
+- [ ] Pagination
 - [ ] Filtrage par distance / difficulté / temps de complétion
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)

@@ -33,3 +33,10 @@ export interface TrailCreate {
   trace: File;
   images: File[];
 }
+
+export interface TrailMapBoundingBox {
+  lat_min: number;
+  lng_min: number;
+  lat_max: number;
+  lng_max: number;
+}

@@ -7,11 +7,12 @@ import "./styles.scss";
 
 interface MapProps {
   children: ReactNode;
+  style?: React.CSSProperties; // Added style prop
 }
 
-function Map({ children = null }: MapProps) {
+function Map({ children = null, style = {} }: MapProps) { // Accepted style prop with default
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ height: "100%", width: "100%", ...style }}>
       <MapContainer
         center={[45.96911585510426, 6.430025782362676]}
         zoom={13}
