@@ -1,21 +1,24 @@
-// Utils
+// Utils (external libraries, hooks, constants)
 import { MapContainer, TileLayer } from "react-leaflet";
 import { ReactNode } from "react";
+import { LatLngExpression } from "leaflet";
 
 // Assets
 import "./styles.scss";
 
 interface MapProps {
-  children: ReactNode;
-  style?: React.CSSProperties; // Added style prop
+  children?: ReactNode;
+  style?: React.CSSProperties;
+  center?: LatLngExpression;
+  zoom?: number;
 }
 
-function Map({ children = null, style = {} }: MapProps) { // Accepted style prop with default
+function Map({ children, style, center, zoom }: MapProps) {
   return (
     <div style={{ height: "100%", width: "100%", ...style }}>
       <MapContainer
-        center={[45.96911585510426, 6.430025782362676]}
-        zoom={13}
+        center={center}
+        zoom={zoom}
         scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
       >
@@ -28,5 +31,12 @@ function Map({ children = null, style = {} }: MapProps) { // Accepted style prop
     </div>
   );
 }
+
+Map.defaultProps = {
+  children: null,
+  style: {},
+  center: [45.96911585510426, 6.430025782362676],
+  zoom: 13,
+};
 
 export default Map;

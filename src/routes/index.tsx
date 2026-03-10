@@ -3,7 +3,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useMap, Popup } from "react-leaflet";
 import { useQuery } from "@tanstack/react-query";
-import { LatLngBounds } from "leaflet";
 import { Alert, Container, Flex, Paper, Stack, Text } from "@mantine/core";
 import "leaflet/dist/leaflet.css";
 
@@ -13,18 +12,36 @@ import Marker from "../components/Map/Marker";
 import TrailCard from "../components/Trails/Trail/TrailCard";
 import TrailCardSkeleton from "../components/Trails/Trail/TrailCardSkeleton";
 
+// Hooks
+import { useQueryMapState } from "../hooks/useQueryMapState";
+
 // Interfaces
 import { Trail } from "../api/trails/trails";
 
 // Queries
 import { trailsQuery } from "../api/trails/trails.api";
 
-function MapMoveHandler({ setBbox }: { setBbox: (bbox: LatLngBounds) => void }) {
+function MapMoveHandler({
+  setLatMin,
+  setLatMax,
+  setLngMin,
+  setLngMax,
+}: {
+  setLatMin: (lat: number | null) => void;
+  setLatMax: (lat: number | null) => void;
+  setLngMin: (lng: number | null) => void;
+  setLngMax: (lng: number | null) => void;
+}) {
   const map = useMap();
 
   useEffect(() => {
     const handleMoveEnd = () => {
-      setBbox(map.getBounds());
+      const bounds = map.getBounds();
+
+      setLatMin(bounds.getSouthWest().lat);
+      setLatMax(bounds.getNorthEast().lat);
+      setLngMin(bounds.getSouthWest().lng);
+      setLngMax(bounds.getNorthEast().lng);
     };
 
     map.on("moveend", handleMoveEnd);
@@ -35,23 +52,24 @@ function MapMoveHandler({ setBbox }: { setBbox: (bbox: LatLngBounds) => void }) 
     return () => {
       map.off("moveend", handleMoveEnd);
     };
-  }, [map, setBbox]);
+  }, [map, setLatMin, setLatMax, setLngMin, setLngMax]);
 
   return null;
 }
 
 function MapComponent() {
-  const [bbox, setBbox] = useState<LatLngBounds | undefined>();
+  const { latMin, latMax, lngMin, lngMax, setLatMin, setLatMax, setLngMin, setLngMax } =
+    useQueryMapState();
   const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
 
   const { data: trails, isLoading } = useQuery(
     trailsQuery(
-      bbox
+      latMin !== null && lngMin !== null && latMax !== null && lngMax !== null
         ? {
-            lat_min: bbox.getSouthWest().lat,
-            lng_min: bbox.getSouthWest().lng,
-            lat_max: bbox.getNorthEast().lat,
-            lng_max: bbox.getNorthEast().lng,
+            lat_min: latMin,
+            lng_min: lngMin,
+            lat_max: latMax,
+            lng_max: lngMax,
           }
         : undefined
     )
@@ -103,8 +121,20 @@ function MapComponent() {
         </Paper>
       </Flex>
       <Flex direction="column" flex="0 0 75%" h="100%">
-        <Map style={{ flexGrow: 1, minHeight: 0 }}>
-          <MapMoveHandler setBbox={setBbox} />
+        <Map
+          style={{ flexGrow: 1, minHeight: 0 }}
+          center={
+            latMin !== null && latMax !== null && lngMin !== null && lngMax !== null
+              ? [(latMin + latMax) / 2, (lngMin + lngMax) / 2]
+              : undefined
+          }
+        >
+          <MapMoveHandler
+            setLatMin={setLatMin}
+            setLatMax={setLatMax}
+            setLngMin={setLngMin}
+            setLngMax={setLngMax}
+          />
           {trails &&
             trails.map((trail) => (
               <Marker

@@ -4,7 +4,7 @@
 
 - **Framework**: React (TypeScript), Vite
 - **Routing**: TanStack Router (File-based routing)
-- **State Management**: TanStack Query (Server state), React Context (Auth state)
+- **State Management**: TanStack Query (Server state), React Context (Auth state), nuqs (Search params/Query state)
 - **UI Library**: Mantine (v8+)
 - **Forms**: React Hook Form with Mantine integration (using `Controller`)
 - **Map**: Leaflet & React-Leaflet

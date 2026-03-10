@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import router from "./utils/router";
 
 // Assets
@@ -32,7 +33,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<div>Loading...</div>}>
         <MantineProvider theme={theme}>
-          <App />
+          <NuqsAdapter>
+            <App />
+          </NuqsAdapter>
         </MantineProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </Suspense>
