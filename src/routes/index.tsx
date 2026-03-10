@@ -1,21 +1,23 @@
 // Utils
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useMap, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { useMap, Popup } from "react-leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { LatLngBounds } from "leaflet";
-import { Alert, Container, Flex, Loader, Paper, Text } from "@mantine/core";
+import { Alert, Container, Flex, Paper, Stack, Text } from "@mantine/core";
+import "leaflet/dist/leaflet.css";
 
 // Components
 import Map from "../components/Map";
+import Marker from "../components/Map/Marker";
+import TrailCard from "../components/Trails/Trail/TrailCard";
+import TrailCardSkeleton from "../components/Trails/Trail/TrailCardSkeleton";
 
 // Interfaces
 import { Trail } from "../api/trails/trails";
 
 // Queries
 import { trailsQuery } from "../api/trails/trails.api";
-import TrailCard from "../components/Trails/Trail/TrailCard";
 
 function MapMoveHandler({ setBbox }: { setBbox: (bbox: LatLngBounds) => void }) {
   const map = useMap();
@@ -66,27 +68,37 @@ function MapComponent() {
           }}
         >
           <Container>
-            {isLoading ? (
-              <Loader mt="md" />
-            ) : (
-              <>
-                <Text size="sm" fw={400} mt="md" mb="md">
-                  {trails?.length || 0} trails
-                </Text>
-                {trails && trails.length === 0 && (
-                  <Alert color="yellow">No trails found in this area.</Alert>
-                )}
-                {trails &&
-                  trails.map((trail) => (
-                    <TrailCard
-                      key={trail.id}
-                      trail={trail}
-                      selectedTrail={selectedTrail}
-                      setSelectedTrail={setSelectedTrail}
-                    />
-                  ))}
-              </>
+            <Text size="sm" fw={400} mt="md" mb="md">
+              {trails?.length || 0} trails
+            </Text>
+
+            {isLoading && (
+              <Stack mt="md">
+                <TrailCardSkeleton />
+                <TrailCardSkeleton />
+                <TrailCardSkeleton />
+              </Stack>
             )}
+
+            {!isLoading && trails && trails.length === 0 && (
+              <Alert color="yellow">No trails found in this area.</Alert>
+            )}
+
+            {!isLoading &&
+              trails &&
+              trails.map((trail) => (
+                <TrailCard
+                  key={trail.id}
+                  trail={trail}
+                  selectedTrail={selectedTrail}
+                  oneMouseEnter={() => {
+                    setSelectedTrail(trail);
+                  }}
+                  onMouseOut={() => {
+                    setSelectedTrail(null);
+                  }}
+                />
+              ))}
           </Container>
         </Paper>
       </Flex>
@@ -98,13 +110,12 @@ function MapComponent() {
               <Marker
                 key={trail.id}
                 position={[trail.stats.latitude, trail.stats.longitude]}
-                eventHandlers={{
-                  mouseover: () => {
-                    setSelectedTrail(trail);
-                  },
-                  mouseout: () => {
-                    setSelectedTrail(null);
-                  },
+                active={selectedTrail?.id === trail.id}
+                onMouseOver={() => {
+                  setSelectedTrail(trail);
+                }}
+                onMouseOut={() => {
+                  setSelectedTrail(null);
                 }}
               >
                 <Popup>{trail.title}</Popup>

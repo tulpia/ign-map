@@ -1,6 +1,7 @@
 # IGN MAP
 
-Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
+Une sorte de copie / re-création de Alltrails avec le SCAN 50 de IGN Rando.
+Le but final sera d'etre une alternative axée trail de Alltrails.
 
 [Accéder au backend](https://github.com/tulpia/ign-map-backend)
 
@@ -22,12 +23,14 @@ Une sorte de copie / recreation de Alltrails avec le SCAN 50 de IGN Rando
 
 - [x] Affichage des trails dans la boundingBox de la map + update au move de la map
 - [x] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
+- [ ] Ajout de nuqs pour mettre le state de la bbox, des filtres et de la pagination dans l'URL
 - [ ] Pagination
 - [ ] Filtrage par distance / difficulté / temps de complétion
 - [ ] Recherche avec Autocomplete IGN
-- [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?)
-- [ ] Changement du tileLayer
+- [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?) avec changement du tileLayer
 - [ ] Pointage par defaut de la map sur le pays de l'user
+- [ ] Mise en place des bonnes donnees dans la Card
+- [ ] Styling
 
 ### Listes
 

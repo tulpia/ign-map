@@ -7,11 +7,13 @@ import { Trail } from "../../../api/trails/trails";
 function TrailCard({
   trail,
   selectedTrail,
-  setSelectedTrail,
+  oneMouseEnter,
+  onMouseOut,
 }: {
   trail: Trail;
   selectedTrail: Trail | null;
-  setSelectedTrail: (trail: Trail | null) => void;
+  oneMouseEnter?: () => void;
+  onMouseOut?: () => void;
 }) {
   const description: string =
     trail.description.length > 100 ? `${trail.description.slice(0, 100)}...` : trail.description;
@@ -23,12 +25,8 @@ function TrailCard({
       radius="md"
       withBorder
       mb="sm"
-      onMouseEnter={() => {
-        setSelectedTrail(trail);
-      }}
-      onMouseLeave={() => {
-        setSelectedTrail(null);
-      }}
+      onMouseEnter={oneMouseEnter}
+      onMouseLeave={onMouseOut}
       style={{
         cursor: "pointer",
         backgroundColor: selectedTrail?.id === trail.id ? "lightgray" : "white",
@@ -49,5 +47,10 @@ function TrailCard({
     </Card>
   );
 }
+
+TrailCard.defaultProps = {
+  oneMouseEnter: undefined,
+  onMouseOut: undefined,
+};
 
 export default TrailCard;
