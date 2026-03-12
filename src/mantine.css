@@ -1,0 +1,46 @@
+/* Global Select styling */
+.selectRoot {
+  position: relative;
+}
+
+.selectLabel {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(var(--mantine-spacing-sm) + 2px);
+  pointer-events: none;
+  font-weight: 500; /* Slightly bolder for black text */
+  font-size: var(--mantine-font-size-sm);
+  color: #000; /* Black label */
+  transition: opacity 150ms ease, visibility 150ms ease;
+}
+
+/* Hide label when input has focus OR has a value */
+.selectRoot.is-filled .selectLabel,
+.selectRoot:focus-within .selectLabel {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Hide the actual placeholder when the label is visible or filled */
+.selectRoot:not(.is-filled):not(:focus-within) .selectInput::placeholder {
+  color: transparent;
+}
+
+.selectInput {
+  color: #000; /* Black selected value */
+  border-color: #000; /* Black border */
+}
+
+/* Ensure border remains black on focus and hover */
+.selectInput:focus,
+.selectInput:focus-within,
+.selectInput:hover {
+  border-color: #000 !important;
+}
+
+/* Black dropdown icon */
+.selectRoot .mantine-Select-section[data-position="right"] {
+  color: #000;
+}

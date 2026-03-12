@@ -34,9 +34,13 @@ export interface TrailCreate {
   images: File[];
 }
 
-export interface TrailMapBoundingBox {
+export interface TrailMapBbox {
   lat_min: number;
   lng_min: number;
   lat_max: number;
   lng_max: number;
+}
+
+export interface TrailMapFilters {
+  difficulty?: TrailDifficulty | null;
 }

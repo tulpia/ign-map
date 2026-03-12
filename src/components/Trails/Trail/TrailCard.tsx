@@ -24,7 +24,6 @@ function TrailCard({
       padding="lg"
       radius="md"
       withBorder
-      mb="sm"
       onMouseEnter={oneMouseEnter}
       onMouseLeave={onMouseOut}
       style={{

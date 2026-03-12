@@ -3,7 +3,8 @@ import { AxiosResponse } from "axios";
 import { axios } from "../axios";
 
 // Interfaces
-import { Trail, TrailMapBoundingBox } from "./trails";
+import { Trail, TrailMapBbox, TrailMapFilters } from "./trails";
+import { TrailMapSort } from "./trails.enums";
 
 // CREATE
 export const createTrail = async (data: FormData): Promise<Trail> =>
@@ -20,8 +21,33 @@ export const createTrail = async (data: FormData): Promise<Trail> =>
 export const getUserTrails = async (): Promise<Trail[]> =>
   axios.get<Trail[]>("/user/trails").then((res) => res.data);
 
-export const getTrails = async (bbox?: TrailMapBoundingBox): Promise<Trail[]> =>
-  axios.get<{ data: Trail[] }>("/trails", { params: bbox }).then((res) => res.data.data);
+export const getTrails = async (
+  bbox: TrailMapBbox,
+  filters?: TrailMapFilters,
+  sort?: TrailMapSort | null
+): Promise<Trail[]> => {
+  const params: Record<string, string> = {};
+
+  params.lat_min = String(bbox.lat_min);
+  params.lng_min = String(bbox.lng_min);
+  params.lat_max = String(bbox.lat_max);
+  params.lng_max = String(bbox.lng_max);
+
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        // Add Spatie filter parameter (filter[key])
+        params[`filter[${key}]`] = value;
+      }
+    });
+  }
+
+  if (sort) {
+    params.sort = sort;
+  }
+
+  return axios.get<{ data: Trail[] }>("/trails", { params }).then((res) => res.data.data);
+};
 
 export const getTrail = async (id: number): Promise<Trail> =>
   axios.get<Trail>(`/trails/${String(id)}`).then((res: AxiosResponse<Trail>) => res.data);

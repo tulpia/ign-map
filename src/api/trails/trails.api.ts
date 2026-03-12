@@ -12,7 +12,10 @@ import {
 } from "./trails.service";
 
 // Interfaces
-import { Trail, TrailMapBoundingBox } from "./trails";
+import { Trail, TrailMapBbox, TrailMapFilters } from "./trails";
+
+// Enums
+import { TrailMapSort } from "./trails.enums";
 
 // CREATE
 export const useTrailCreate = (): UseMutationResult<Trail, Error, FormData> => {
@@ -52,9 +55,13 @@ export const userTrailsQuery = () => ({
   retry: false,
 });
 
-export const trailsQuery = (bbox?: TrailMapBoundingBox) => ({
-  queryKey: ["trails", bbox] as const,
-  queryFn: () => getTrails(bbox),
+export const trailsQuery = (
+  bbox: TrailMapBbox,
+  filters?: TrailMapFilters,
+  sort?: TrailMapSort | null
+) => ({
+  queryKey: ["trails", bbox, filters, sort] as const,
+  queryFn: () => getTrails(bbox, filters, sort),
   retry: false,
 });
 

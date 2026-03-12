@@ -1,7 +1,7 @@
 // Utils
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { createTheme, MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider, Select } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/react";
@@ -10,6 +10,7 @@ import router from "./utils/router";
 // Assets
 import "leaflet/dist/leaflet.css";
 import "@mantine/core/styles.css";
+import "./mantine.css";
 
 // Context
 import { App } from "./providers/app/App";
@@ -25,7 +26,15 @@ declare module "@tanstack/react-router" {
 }
 
 const theme = createTheme({
-  /** Put your mantine theme override here */
+  components: {
+    Select: Select.extend({
+      classNames: (_theme, props) => ({
+        root: `selectRoot ${props.value ? "is-filled" : ""}`,
+        label: "selectLabel",
+        input: "selectInput",
+      }),
+    }),
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
