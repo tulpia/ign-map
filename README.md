@@ -23,9 +23,9 @@ Le but final sera d'etre une alternative axée trail de Alltrails.
 
 - [x] Affichage des trails dans la boundingBox de la map + update au move de la map
 - [x] Affichage des trails dans la forme d'une liste dans un encart à côté de la map
-- [ ] Ajout de nuqs pour mettre le state de la bbox, des filtres et de la pagination dans l'URL
+- [x] Ajout de nuqs pour mettre le state de la bbox, des filtres et de la pagination dans l'URL
 - [ ] Pagination
-- [ ] Filtrage par distance / difficulté / temps de complétion
+- [x] Filtrage par distance / difficulté / temps de complétion
 - [ ] Recherche avec Autocomplete IGN
 - [ ] Layer des Maps (Scan50 / IGN standard / Mapbox ?) avec changement du tileLayer
 - [ ] Pointage par defaut de la map sur le pays de l'user

@@ -20,7 +20,7 @@ function Sidebar({
   setSelectedTrail: (trail: Trail | null) => void;
 }) {
   return (
-    <Flex direction="column" flex="0 0 20%" maw="350px" h="100%">
+    <Flex direction="column" flex="0 0 350px" h="100%">
       <Paper
         style={{
           flexGrow: 1,
